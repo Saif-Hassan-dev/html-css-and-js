@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mini Mario Platformer</title>
+    <style>
+        body {
+            background: #5c94fc;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #nameHolder {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    position: static; /* Remove absolute */
+    z-index: 1;
+        }
+
+        #gameName {
+      font-family: 'Arial', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px 40px;
+    border-radius: 10px;
+    font-size: 2em;
+        }
+        #game {
+            position: relative;
+            width: 640px;
+            height: 360px;
+            margin: 40px auto;
+            background: linear-gradient(to top, #5c94fc 60%, #b3e0ff 100%);
+            border: 4px solid #222;
+            border-radius: 5%;
+            overflow: hidden;
+        }
+        .ground {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+            background: #7cfc00;
+            border-top: 6px solid #3e7c00;
+        }
+
+        
+    
+        /* FOR THE BLOCKS */
+               .block {
+            position: absolute;
+            width: 64px;
+            height: 24px;
+            background: #c68642;
+            border: 2px solid #8d5524;
+            border-radius: 4px;
+            box-shadow: 0 2px 0 #8d5524;
+        }
+
+        .mario {
+            position: absolute;
+            width: 32px;
+            height: 48px;
+            left: 50px;
+            bottom: 60px;
+            background: #ffcc00;
+            border: 2px solid #b35a00;
+            border-radius: 8px 8px 12px 12px;
+            box-shadow: 0 0 0 4px #e04a00 inset;
+        }
+        .mario::before {
+            content: '';
+            display: block;
+            position: absolute;
+            left: 6px;
+            top: 6px;
+            width: 20px;
+            height: 16px;
+            background: #001798;
+            border-radius: 8px 8px 0 0;
+        }
+
+        /* ENEMIES */
+        .enemy {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background: #a0522d;
+    border-radius: 50%;
+    border: 2px solid #222;
+    z-index: 2;
+}
+
+    </style>
+</head>
+<body>
+    <div id="nameHolder">
+        <div id="gameName">SuperMario RIPOFF</div>
+    </div>
+    
+    <div id="game">
+        <div class="ground"></div>
+        <div class="block" style="left: 150px; bottom: 140px;"></div>
+        <div class="block" style="left: 300px; bottom: 220px;"></div>
+        <div class="block" style="left: 450px; bottom: 100px;"></div>
+        <div class="mario" id="mario"></div>
+    </div>
+
+    <div id="message" style="display:none; position:absolute; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.5); color:#fff; font-size:2em; display:flex; align-items:center; justify-content:center; flex-direction:column; z-index:10;">
+    <span id="msgText"></span>
+    <button id="restartBtn" style="margin-top:20px; font-size:1em;">Restart</button>
+</div>
+    <script>
+        const mario = document.getElementById('mario');
+        const game = document.getElementById('game');
+        const groundHeight = 50;
+        const gameWidth = 640;
+        const gameHeight = 360;
+        const marioWidth = 32;
+        const marioHeight = 48;
+        const message = document.getElementById('message');
+        const msgText = document.getElementById('msgText');
+        const restartBtn = document.getElementById('restartBtn');
+        let gamePaused = false;
+        
+        
+        
+        // Get all blocks
+        const blocks = Array.from(document.querySelectorAll('.block')).map(block => {
+            return {
+                left: parseInt(block.style.left),
+                bottom: parseInt(block.style.bottom),
+                width: parseInt(block.style.width) || 64,
+                height: parseInt(block.style.height) || 24,
+                elem: block
+            };
+        });
+
+
+        // --- ENEMY SETUP ---
+const enemies = [
+    { x: 200, y: groundHeight, width: 32, height: 32, vx: 2, alive: true, elem: null },
+    { x: 400, y: groundHeight, width: 32, height: 32, vx: -2, alive: true, elem: null }
+    
+];
+
+        let x = 50;
+        let y = groundHeight;
+        let vy = 0;
+        let onGround = true;
+        const gravity = 1.2;
+        const jumpPower = 18;
+        const moveSpeed = 5;
+
+        let keys = {};
+
+        document.addEventListener('keydown', e => {
+            keys[e.code] = true;
+        });
+        document.addEventListener('keyup', e => {
+            keys[e.code] = false;
+        });
+
+        
+
+
+// Create enemy elements ONCE
+for (let enemy of enemies) {
+    const el = document.createElement('div');
+    el.className = 'enemy';
+    el.style.left = enemy.x + 'px';
+    el.style.bottom = enemy.y + 'px';
+    game.appendChild(el);
+    enemy.elem = el;
+}
+
+// Reset function for Mario and enemies
+function resetGame() {
+    x = 50;
+    y = groundHeight;
+    vy = 0;
+    onGround = true;
+    for (let i = 0; i < enemies.length; i++) {
+        let enemy = enemies[i];
+        enemy.x = i === 0 ? 200 : 400;
+        enemy.y = groundHeight;
+        enemy.vx = i === 0 ? 2 : -2;
+        enemy.alive = true;
+        enemy.elem.style.display = '';
+        enemy.elem.style.left = enemy.x + 'px';
+        enemy.elem.style.bottom = enemy.y + 'px';
+    }
+    // Start the game loop
+    if (typeof window.gameLoopHandle !== 'undefined') {
+        cancelAnimationFrame(window.gameLoopHandle);
+    }
+    window.gameLoopHandle = requestAnimationFrame(gameLoop);
+}
+
+        function gameLoop() {
+
+            if (gamePaused) return;
+            // Horizontal movement
+            if (keys['ArrowLeft']) {
+                x -= moveSpeed;
+                if (x < 0) x = 0;
+            }
+            if (keys['ArrowRight']) {
+                x += moveSpeed;
+                if (x > gameWidth - marioWidth) x = gameWidth - marioWidth;
+            }
+
+            // Jump
+            if (keys['Space'] || keys['ArrowUp']) {
+                if (onGround) {
+                    vy = jumpPower;
+                    onGround = false;
+                }
+            }
+
+            // Apply gravity
+            if (!onGround) {
+                vy -= gravity;
+                y += vy;}
+
+                 // Collision with ground
+            if (y <= groundHeight) {
+                y = groundHeight;
+                vy = 0;
+                onGround = true;
+            } else {
+                // Collision with blocks (from above)
+                onGround = false;
+                for (let block of blocks) {
+                    // Mario's previous and current positions
+                    let prevY = y - vy;
+                    let marioLeft = x;
+                    let marioRight = x + marioWidth;
+                    let blockLeft = block.left;
+                    let blockRight = block.left + block.width;
+                    let blockTop = block.bottom + block.height;
+                    let blockBottom = block.bottom;
+
+                    // Check if Mario is falling onto the block
+                    if (
+                        prevY >= blockTop && // was above block
+                        y < blockTop &&      // now at or below block top
+                        marioRight > blockLeft &&
+                        marioLeft < blockRight
+                    ) {
+                        y = blockTop;
+                        vy = 0;
+                        onGround = true;
+                    }
+                }
+            }
+
+            // Prevent Mario from going below ground
+            if (y < groundHeight) {
+                y = groundHeight;
+                vy = 0;
+                onGround = true;
+            }
+ // --- ENEMY MOVEMENT & COLLISION ---
+for (let enemy of enemies) {
+    if (enemy.alive) {
+        enemy.x += enemy.vx;
+        if (enemy.x < 0 || enemy.x > gameWidth - enemy.width) {
+            enemy.vx *= -1;
+            enemy.x = Math.max(0, Math.min(gameWidth - enemy.width, enemy.x));
+        }
+        enemy.elem.style.left = enemy.x + 'px';
+        enemy.elem.style.bottom = enemy.y + 'px';
+    }
+}
+
+// Check for collisions with enemies
+for (let enemy of enemies) {
+    if (!enemy.alive) continue;
+
+    let marioLeft = x;
+    let marioRight = x + marioWidth;
+    let marioTop = y + marioHeight;
+    let marioBottom = y;
+    let enemyLeft = enemy.x;
+    let enemyRight = enemy.x + enemy.width;
+    let enemyTop = enemy.y + enemy.height;
+    let enemyBottom = enemy.y;
+
+    // Check for overlap
+    if (
+        marioRight > enemyLeft &&
+        marioLeft < enemyRight &&
+        marioTop > enemyBottom &&
+        marioBottom < enemyTop
+    ) {
+        // Stomp: Mario is falling and his feet are just above the enemy
+        if (vy < 0 && (marioBottom < enemyTop) && (marioTop - enemyTop > 0)) {
+            enemy.alive = false;
+            enemy.elem.style.display = 'none';
+            vy = 12; // bounce up
+        } else {
+           
+         msgText.textContent = "Game Over!";
+         message.style.display = "flex";
+        gamePaused = true;
+        return;
+        }
+    }
+}
+            // Check if all enemies are defeated
+if (enemies.every(e => !e.alive)) {
+    msgText.textContent = "You Win!";
+    message.style.display = "flex";
+    gamePaused = true;
+    return;
+}
+            // Update Mario's position
+            mario.style.left = x + 'px';
+            mario.style.bottom = y + 'px';
+
+            requestAnimationFrame(gameLoop);
+
+  
+        }
+        
+        restartBtn.onclick = function() {
+    message.style.display = "none";
+    gamePaused = false;
+    resetGame();
+};
+    document.addEventListener('keydown', function(e) {
+        if(gamePaused &&(e.code === 'Enter' || e.code === 'Enter')) {
+            message.style.display = "none";
+            gamePaused = false;
+            resetGame();
+        }
+    });
+        // Start the game loop
+        resetGame();
+    </script>
+</body>
+</html>

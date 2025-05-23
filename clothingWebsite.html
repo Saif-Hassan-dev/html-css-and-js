@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAMP CLOTHING</title>
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="Screenshot 2025-05-19 203335.png">
+    <style>
+        :root {
+            --main-bg: #0a0a0a;
+            --accent: #e60026;
+            --text: #fff;
+            --muted: #888;
+            --card-bg: #181818;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            background: var(--main-bg);
+            color: var(--text);
+            font-family: 'Montserrat', Arial, sans-serif;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5vw;
+            background: rgba(10,10,10,0.95);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-family: 'UnifrakturCook', cursive;
+            font-size: 2.5rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--accent), 0 0 20px #fff2;
+        }
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        nav a:hover {
+            color: var(--accent);
+        }
+        .hero {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(120deg, #0a0a0a 60%, #e60026 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -30%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, #e60026 0%, transparent 70%);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero h1 {
+            font-family: 'UnifrakturCook', cursive;
+            font-size: 4rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px #e6002688, 0 0 40px #fff2;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+        .hero button {
+            background: var(--accent);
+            color: var(--text);
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 20px #e6002644;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .hero button:hover {
+            background: #fff;
+            color: var(--accent);
+            transform: scale(1.05);
+        }
+        .section {
+            padding: 4rem 5vw;
+        }
+        .section-title {
+            font-family: 'UnifrakturCook', cursive;
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 0 20px #e6002622;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 0 40px #e6002644;
+        }
+        .product-img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            filter: grayscale(0.2) contrast(1.1) brightness(0.9);
+            transition: filter 0.2s;
+        }
+        .product-card:hover .product-img {
+            filter: grayscale(0) contrast(1.2) brightness(1.1);
+        }
+        .product-info {
+            padding: 1.2rem;
+            text-align: center;
+        }
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+        .product-price {
+            color: var(--accent);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .product-btn {
+            background: var(--accent);
+            color: var(--text);
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .product-btn:hover {
+            background: #fff;
+            color: var(--accent);
+        }
+        .about {
+            background: #181818;
+            border-radius: 18px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            color: #ccc;
+            box-shadow: 0 0 20px #e6002611;
+        }
+        .about strong {
+            color: var(--accent);
+        }
+        .mystery {
+            text-align: center;
+            margin: 3rem 0 0 0;
+            font-size: 1.1rem;
+            color: #fff;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            font-style: italic;
+        }
+        footer {
+            background: #0a0a0a;
+            color: #888;
+            text-align: center;
+            padding: 2rem 0 1rem 0;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+        .socials {
+            margin: 1rem 0;
+        }
+        .socials a {
+            color: var(--accent);
+            margin: 0 0.7rem;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .socials a:hover {
+            color: #fff;
+        }
+        /* Responsive */
+        @media (max-width: 700px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.2rem 3vw;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .section {
+                padding: 2rem 3vw;
+            }
+            .about {
+                padding: 1rem;
+            }
+        }
+        @media (max-width: 500px) {
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            .section-title {
+                font-size: 1.3rem;
+            }
+            .product-img {
+                height: 180px;
+            }
+        }
+        #chat-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+#chat-toggle {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 12px #e6002622;
+    transition: background 0.2s;
+}
+#chat-toggle:hover {
+    background: #fff;
+    color: var(--accent);
+}
+#chat-box {
+    display: none;
+    flex-direction: column;
+    width: 320px;
+    height: 380px;
+    background: #181818ee;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px #e6002633, 0 2px 16px #000a;
+    margin-bottom: 10px;
+    padding: 1rem;
+}
+#chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    color: #fff;
+    font-size: 1rem;
+    max-height: 260px;
+}
+#chat-form {
+    display: flex;
+    gap: 0.5rem;
+}
+#chat-input {
+    flex: 1;
+    padding: 0.6rem;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    background: #222;
+    color: #fff;
+}
+#chat-form button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 0.6rem 1.1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+#chat-form button:hover {
+    background: #fff;
+    color: var(--accent);
+}
+    </style>
+
+</head>
+<body>
+    <header>
+        <div class="logo">VAMP</div>
+        <nav>
+            <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin-bottom:2rem;">
+    <input id="search-input" type="text" placeholder="Search products..." style="padding:0.7rem 1.2rem;border-radius:18px;border:none;font-size:1rem;width:220px;">
+    <select id="price-filter" style="padding:0.7rem 1.2rem;border-radius:18px;border:none;font-size:1rem;">
+        <option value="">All Prices</option>
+        <option value="0-40">Under $40</option>
+        <option value="40-80">$40 - $80</option>
+        <option value="80-999">$80+</option>
+    </select>
+            <a href="#products">Shop</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>VAMP CLOTHING</h1>
+            <p>Step into the shadows. Wear the unknown.<br>Inspired by the mysterious world of Playboi Carti.</p>
+            <button onclick="window.location.href='clothingWebsiteSHIRTS.html'">Shop Now</button>
+        </div>
+    </section>
+    <section class="section" id="products">
+        <div class="section-title">Featured Drops</div>
+        <div id="chat-widget">
+    <button id="chat-toggle">&#128172; Chat</button>
+    <div id="chat-box">
+        <div id="chat-messages"></div>
+        <form id="chat-form">
+            <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off" />
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</div>
+
+</div>
+       <div class="products" id="product-list">
+    <div class="product-card" data-name="BOMBER" data-price="80">
+        <img class="product-img" src="VIEW_CARTI_ECOM_2025_MUSIC_BOMBER2_FRONT.webp" alt="Vamp Hoodie">
+        <div class="product-info">
+            <div class="product-title">BOMBER</div>
+            <div class="product-price">$80</div>
+            <button class="product-btn" onclick="addToCart('BOMBER')">Add to Cart</button>
+        </div>
+    </div>
+    <div class="product-card" data-name="pbc I AM TEE" data-price="40">
+        <img class="product-img" src="product_pbc_iamtee_red.webp" alt="Shadow Tee">
+        <div class="product-info">
+            <div class="product-title">pbc I AM TEE</div>
+            <div class="product-price">$40</div>
+            <button class="product-btn" onclick="addToCart('pbc I AM TEE')">Add to Cart</button>
+        </div>
+    </div>
+    <div class="product-card" data-name="2025 bomber" data-price="30">
+        <img class="product-img" src="VIEW_CARTI_ECOM_2025_MUSIC_BOMBER4_FRONT.webp" alt="Red Moon Cap">
+        <div class="product-info">
+            <div class="product-title">2025 bomber</div>
+            <div class="product-price">$30</div>
+            <button class="product-btn" onclick="addToCart('2025 bomber')">Add to Cart</button>
+        </div>
+    </div>
+    <div class="product-card" data-name="LS1 FRONT NEW" data-price="120">
+        <img class="product-img" src="VIEW_CARTI_ECOM_2025_MUSIC_LS1_FRONT_NEW.webp" alt="Vampire Denim">
+        <div class="product-info">
+            <div class="product-title">LS1 FRONT NEW</div>
+            <div class="product-price">$120</div>
+            <button class="product-btn" onclick="addToCart('LS1 FRONT NEW')">Add to Cart</button>
+        </div>
+    </div>
+</div>
+    </section>
+    <section class="section" id="about">
+        <div class="section-title">About VAMP</div>
+        <div class="about">
+            <p>
+                <strong>VAMP</strong> is not just a clothing brand. It's a movement for the night-walkers, the mysterious, the ones who live in the shadows and thrive in the unknown.<br>
+                Inspired by the enigmatic energy of <strong>Playboi Carti</strong>, our pieces blend streetwear with a dark, vampiric aesthetic.<br>
+                Every drop is limited. Every piece tells a story.<br>
+                <span style="color:var(--accent);font-weight:bold;">Dare to wear the unknown.</span>
+            </p>
+        </div>
+        <div class="mystery">
+            <span>𝕏𝕏𝕏 𝕋𝕙𝕖 𝕟𝕚𝕘𝕙𝕥 𝕚𝕤 𝕠𝕦𝕣𝕤 𝕏𝕏𝕏</span>
+        </div>
+    </section>
+    <section class="section" id="contact">
+        <div class="section-title">Contact</div>
+        <div class="about" style="text-align:center;">
+            <p>Questions? Collabs? <br>
+            <a href="mailto:vamp@clothing.com" style="color:var(--accent);text-decoration:none;">vamp@clothing.com</a></p>
+            <div class="socials">
+                <a href="#" title="Instagram"><span aria-hidden="true">&#xf16d;</span></a>
+                <a href="#" title="Twitter"><span aria-hidden="true">&#xf099;</span></a>
+                <a href="#" title="TikTok"><span aria-hidden="true">&#xe07b;</span></a>
+            </div>
+        </div>
+
+        <div id="chat-widget">
+    <button id="chat-toggle">&#128172; Chat</button>
+    <div id="chat-box">
+        <div id="chat-messages"></div>
+        <form id="chat-form">
+            <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off" />
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</div>
+
+    </section>
+    <footer>
+        &copy; 2024 VAMP CLOTHING. All rights reserved.<br>
+        <span style="font-size:0.9em;opacity:0.6;">Site inspired by Playboi Carti's mysterious world.</span>
+    </footer>
+
+    <div id="cart-section" style="position:fixed;top:80px;right:20px;z-index:200;max-width:320px;width:90vw;">
+<div style="background:#181818;border-radius:14px;box-shadow:0 0 20px #e6002611;padding:1.2rem 1rem 1rem 1rem;color:#fff;">
+<div style="display:flex;align-items:center;justify-content:space-between;">
+<span style="font-family:'UnifrakturCook',cursive;font-size:1.3rem;color:var(--accent);letter-spacing:1px;">Cart</span>
+<button id="close-cart" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;">&times;</button>
+</div>
+<div id="cart-items" style="margin-top:1rem;min-height:40px;color:#ccc;font-size:1rem;"></div>
+<div id="cart-total" style="margin-top:0.7rem;font-weight:bold;color:var(--accent);"></div>
+
+<button id="checkout-btn" style="margin-top:1rem;width:100%;background:var(--accent);color:#fff;border:none;padding:0.8rem 0;font-size:1.1rem;border-radius:20px;cursor:pointer;font-weight:700;">Checkout</button>
+</div>
+
+</div>
+
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script>
+        // Replace span icons with FontAwesome
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.socials a').forEach(function(a) {
+                let icon = a.title.toLowerCase();
+                let i = document.createElement('i');
+                if(icon === 'instagram') i.className = 'fab fa-instagram';
+                if(icon === 'twitter') i.className = 'fab fa-twitter';
+                if(icon === 'tiktok') i.className = 'fab fa-tiktok';
+                a.innerHTML = '';
+                a.appendChild(i);
+            });
+        });
+
+        // Cart logic
+let cart = [];
+const cartSection = document.getElementById('cart-section');
+const cartItemsDiv = document.getElementById('cart-items');
+const cartTotalDiv = document.getElementById('cart-total');
+const closeCartBtn = document.getElementById('close-cart');
+cartSection.style.display = 'none';
+
+// Product price map
+const productPrices = {
+'BOMBER': 80,
+'pbc I AM TEE': 40,
+'2025 bomber': 30,
+'LS1 FRONT NEW': 120
+};
+
+function addToCart(product) {
+// Check if product already in cart
+let found = cart.find(item => item.name === product);
+if(found) {
+found.qty += 1;
+} else {
+cart.push({name: product, qty: 1});
+}
+renderCart();
+cartSection.style.display = 'block';
+}
+
+function renderCart() {
+if(cart.length === 0) {
+cartItemsDiv.innerHTML = '<span style="color:#888;">Cart is empty.</span>';
+cartTotalDiv.textContent = '';
+return;
+}
+cartItemsDiv.innerHTML = cart.map(item =>
+`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+<span>${item.name} <span style="color:var(--muted);">x${item.qty}</span></span>
+<button onclick="removeFromCart('${item.name}')" style="background:none;border:none;color:var(--accent);font-size:1.1rem;cursor:pointer;">&minus;</button>
+</div>`
+).join('');
+let total = cart.reduce((sum, item) => sum + (productPrices[item.name] || 0) * item.qty, 0);
+cartTotalDiv.textContent = 'Total: $' + total;
+}
+
+function removeFromCart(product) {
+let idx = cart.findIndex(item => item.name === product);
+if(idx > -1) {
+cart[idx].qty -= 1;
+if(cart[idx].qty <= 0) cart.splice(idx, 1);
+}
+renderCart();
+}
+
+closeCartBtn.onclick = () => { cartSection.style.display = 'none'; };
+
+// Optional: Show cart when user clicks "Add to Cart"
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+
+document.getElementById('checkout-btn').onclick = function() {
+    alert('Order Confirmed!');
+};
+
+const chatToggle = document.getElementById('chat-toggle');
+const chatBox = document.getElementById('chat-box');
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('chat-input');
+const chatMessages = document.getElementById('chat-messages');
+
+chatToggle.onclick = () => {
+    chatBox.style.display = chatBox.style.display === 'flex' ? 'none' : 'flex';
+};
+
+chatForm.onsubmit = function(e) {
+    e.preventDefault();
+    const msg = chatInput.value.trim();
+    if(msg) {
+        const userMsg = document.createElement('div');
+        userMsg.style.margin = "0.5rem 0";
+        userMsg.style.textAlign = "right";
+        userMsg.innerHTML = `<span style="background:var(--accent);color:#fff;padding:0.4rem 0.9rem;border-radius:16px;display:inline-block;">${msg}</span>`;
+        chatMessages.appendChild(userMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        chatInput.value = '';
+        // Simulate bot reply
+        setTimeout(() => {
+            const botMsg = document.createElement('div');
+            botMsg.style.margin = "0.5rem 0";
+            botMsg.style.textAlign = "left";
+            botMsg.innerHTML = `<span style="background:#222;color:#fff;padding:0.4rem 0.9rem;border-radius:16px;display:inline-block;">Thanks for your message! We'll get back to you soon.</span>`;
+            chatMessages.appendChild(botMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 800);
+    }
+};
+// Search and filter logic
+const searchInput = document.getElementById('search-input');
+const priceFilter = document.getElementById('price-filter');
+const productList = document.getElementById('product-list');
+const productCards = Array.from(productList.getElementsByClassName('product-card'));
+
+function filterProducts() {
+    const search = searchInput.value.toLowerCase();
+    const priceVal = priceFilter.value;
+    let [min, max] = [0, Infinity];
+    if (priceVal) {
+        [min, max] = priceVal.split('-').map(Number);
+    }
+    productCards.forEach(card => {
+        const name = card.getAttribute('data-name').toLowerCase();
+        const price = parseFloat(card.getAttribute('data-price'));
+        const matchesSearch = name.includes(search);
+        const matchesPrice = price >= min && price <= max;
+        card.style.display = (matchesSearch && matchesPrice) ? '' : 'none';
+    });
+}
+searchInput.addEventListener('input', filterProducts);
+priceFilter.addEventListener('change', filterProducts);
+    </script>
+</body>
+</html>

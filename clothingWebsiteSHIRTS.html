@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products | VAMP CLOTHING</title>
+    <link rel="icon" type="image/png" href="Screenshot 2025-05-19 203335.png">
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main-bg: #0a0a0a;
+            --accent: #e60026;
+            --text: #fff;
+            --muted: #888;
+            --card-bg: #181818;
+        }
+        body {
+            margin: 0;
+            background: var(--main-bg);
+            color: var(--text);
+            font-family: 'Montserrat', Arial, sans-serif;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5vw;
+            background: rgba(10,10,10,0.95);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-family: 'UnifrakturCook', cursive;
+            font-size: 2.5rem;
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--accent), 0 0 20px #fff2;
+        }
+        nav {
+            display: flex;
+            gap: 2rem;
+        }
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        nav a:hover {
+            color: var(--accent);
+        }
+        .section-title {
+            font-size: 2.3rem;
+            font-family: 'UnifrakturCook', cursive;
+            color: var(--accent);
+            margin: 2.5rem 0 2rem 0;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        .product-grid {
+            display: flex;
+            gap: 40px 32px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 3.5rem;
+        }
+        .product-card {
+            background: linear-gradient(135deg, #181818 80%, #e6002615 100%);
+            border-radius: 22px;
+            box-shadow: 0 4px 32px #e6002622, 0 1.5px 8px #0008;
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            width: 220px;
+            min-height: 320px;
+            text-align: center;
+            color: #fff;
+            transition: transform 0.22s cubic-bezier(.4,2,.6,1), box-shadow 0.22s;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card:hover {
+            transform: translateY(-12px) scale(1.035);
+            box-shadow: 0 12px 48px #e6002644, 0 2px 16px #000a;
+            border: 1.5px solid var(--accent);
+        }
+        .product-card img {
+            width: 90%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 14px;
+            margin-bottom: 1.2rem;
+            background: #222;
+            box-shadow: 0 2px 16px #0005;
+        }
+        .product-card h3 {
+            margin: 0.7rem 0 0.3rem 0;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+        .product-card p {
+            margin: 0.2rem 0 1.1rem 0;
+            color: var(--muted);
+            font-size: 1.18rem;
+        }
+        .product-card button {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 0.9rem 2.2rem;
+            font-size: 1.08rem;
+            font-weight: 700;
+            border-radius: 24px;
+            cursor: pointer;
+            margin-top: 0.7rem;
+            box-shadow: 0 2px 12px #e6002622;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+        .product-card button:hover {
+            background: #fff;
+            color: var(--accent);
+            box-shadow: 0 4px 24px #e6002633;
+        }
+        /* Cart styles */
+        #cart-section {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 200;
+            max-width: 340px;
+            width: 90vw;
+            background: #181818ee;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px #e6002633, 0 2px 16px #000a;
+            padding: 1.3rem 1.2rem 1.2rem 1.2rem;
+            display: none;
+            color: #fff;
+        }
+        #cart-section .cart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        #cart-section .cart-header span {
+            font-family: 'UnifrakturCook', cursive;
+            font-size: 1.3rem;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+        #cart-section .cart-header button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        #cart-items {
+            margin-top: 1rem;
+            min-height: 40px;
+            color: #ccc;
+            font-size: 1rem;
+        }
+        #cart-total {
+            margin-top: 0.7rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        #checkout-btn {
+            margin-top: 1rem;
+            width: 100%;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 0;
+            font-size: 1.1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+        #checkout-btn:hover {
+            background: #fff;
+            color: var(--accent);
+        }
+        footer {
+            background: #0a0a0a;
+            color: #888;
+            text-align: center;
+            padding: 2rem 0 1rem 0;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+        @media (max-width: 900px) {
+            .product-card {
+                width: 90vw;
+                max-width: 400px;
+            }
+            .product-grid {
+                gap: 24px;
+            }
+        }
+        @media (max-width: 600px) {
+            .product-card {
+                width: 98vw;
+                max-width: 98vw;
+                min-height: 350px;
+                padding: 1.2rem 0.5rem 1rem 0.5rem;
+            }
+            .product-card img {
+                height: 160px;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            #cart-section {
+                top: 60px;
+                right: 2vw;
+                padding: 1rem 0.5rem 1rem 0.5rem;
+            }
+        }
+        #chat-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+#chat-toggle {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 12px #e6002622;
+    transition: background 0.2s;
+}
+#chat-toggle:hover {
+    background: #fff;
+    color: var(--accent);
+}
+#chat-box {
+    display: none;
+    flex-direction: column;
+    width: 320px;
+    height: 380px;
+    background: #181818ee;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px #e6002633, 0 2px 16px #000a;
+    margin-bottom: 10px;
+    padding: 1rem;
+}
+#chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    color: #fff;
+    font-size: 1rem;
+    max-height: 260px;
+}
+#chat-form {
+    display: flex;
+    gap: 0.5rem;
+}
+#chat-input {
+    flex: 1;
+    padding: 0.6rem;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    background: #222;
+    color: #fff;
+}
+#chat-form button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 0.6rem 1.1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+#chat-form button:hover {
+    background: #fff;
+    color: var(--accent);
+}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">VAMP</div>
+        <nav>
+            <a href="clothingWebsite.html">Home</a>
+            <a href="clothingWebsiteSHIRTS.html">Shirts</a>
+            <a href="#">All Products</a>
+        </nav>
+    </header>
+    <section>
+        <div class="section-title">All Available Items</div>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="images/shirt1.jpg" alt="Classic White Shirt">
+                <h3>Classic White Shirt</h3>
+                <p>$25.00</p>
+                <button onclick="addToCart('Classic White Shirt')">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="images/pants1.jpg" alt="Blue Jeans">
+                <h3>Blue Jeans</h3>
+                <p>$40.00</p>
+                <button onclick="addToCart('Blue Jeans')">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="images/accessory1.jpg" alt="Leather Belt">
+                <h3>Leather Belt</h3>
+                <p>$15.00</p>
+                <button onclick="addToCart('Leather Belt')">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="images/shirt2.jpg" alt="Casual Black Shirt">
+                <h3>Casual Black Shirt</h3>
+                <p>$30.00</p>
+                <button onclick="addToCart('Casual Black Shirt')">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="images/pants2.jpg" alt="Khaki Pants">
+                <h3>Khaki Pants</h3>
+                <p>$35.00</p>
+                <button onclick="addToCart('Khaki Pants')">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+    <!-- Cart Sidebar -->
+    <div id="cart-section">
+        <div class="cart-header">
+            <span>Cart</span>
+            <button id="close-cart">&times;</button>
+        </div>
+        <div id="cart-items"></div>
+        <div id="cart-total"></div>
+        <button id="checkout-btn">Checkout</button>
+    </div>
+    <div id="chat-widget">
+    <button id="chat-toggle">&#128172; Chat</button>
+    <div id="chat-box">
+        <div id="chat-messages"></div>
+        <form id="chat-form">
+            <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off" />
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</div>
+    <footer>
+        &copy; 2025 VAMP CLOTHING. All rights reserved.
+    </footer>
+    <script>
+        // Product price map
+        const productPrices = {
+            'Classic White Shirt': 25,
+            'Blue Jeans': 40,
+            'Leather Belt': 15,
+            'Casual Black Shirt': 30,
+            'Khaki Pants': 35
+        };
+
+        let cart = [];
+        const cartSection = document.getElementById('cart-section');
+        const cartItemsDiv = document.getElementById('cart-items');
+        const cartTotalDiv = document.getElementById('cart-total');
+        const closeCartBtn = document.getElementById('close-cart');
+        const checkoutBtn = document.getElementById('checkout-btn');
+
+        function addToCart(product) {
+            let found = cart.find(item => item.name === product);
+            if(found) {
+                found.qty += 1;
+            } else {
+                cart.push({name: product, qty: 1});
+            }
+            renderCart();
+            cartSection.style.display = 'block';
+        }
+
+        function renderCart() {
+            if(cart.length === 0) {
+                cartItemsDiv.innerHTML = '<span style="color:#888;">Cart is empty.</span>';
+                cartTotalDiv.textContent = '';
+                return;
+            }
+            cartItemsDiv.innerHTML = cart.map(item =>
+                `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+                    <span>${item.name} <span style="color:var(--muted);">x${item.qty}</span></span>
+                    <button onclick="removeFromCart('${item.name}')" style="background:none;border:none;color:var(--accent);font-size:1.1rem;cursor:pointer;">&minus;</button>
+                </div>`
+            ).join('');
+            let total = cart.reduce((sum, item) => sum + (productPrices[item.name] || 0) * item.qty, 0);
+            cartTotalDiv.textContent = 'Total: $' + total;
+        }
+
+        function removeFromCart(product) {
+            let idx = cart.findIndex(item => item.name === product);
+            if(idx > -1) {
+                cart[idx].qty -= 1;
+                if(cart[idx].qty <= 0) cart.splice(idx, 1);
+            }
+            renderCart();
+        }
+
+        closeCartBtn.onclick = () => { cartSection.style.display = 'none'; };
+
+        // Optional: Show cart when user clicks "Add to Cart"
+        window.addToCart = addToCart;
+        window.removeFromCart = removeFromCart;
+
+        checkoutBtn.onclick = function() {
+            if(cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            alert('Order Confirmed!');
+            cart = [];
+            renderCart();
+            cartSection.style.display = 'none';
+        };
+        const chatToggle = document.getElementById('chat-toggle');
+const chatBox = document.getElementById('chat-box');
+const chatForm = document.getElementById('chat-form');
+const chatInput = document.getElementById('chat-input');
+const chatMessages = document.getElementById('chat-messages');
+
+chatToggle.onclick = () => {
+    chatBox.style.display = chatBox.style.display === 'flex' ? 'none' : 'flex';
+};
+
+chatForm.onsubmit = function(e) {
+    e.preventDefault();
+    const msg = chatInput.value.trim();
+    if(msg) {
+        const userMsg = document.createElement('div');
+        userMsg.style.margin = "0.5rem 0";
+        userMsg.style.textAlign = "right";
+        userMsg.innerHTML = `<span style="background:var(--accent);color:#fff;padding:0.4rem 0.9rem;border-radius:16px;display:inline-block;">${msg}</span>`;
+        chatMessages.appendChild(userMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        chatInput.value = '';
+        // Simulate bot reply
+        setTimeout(() => {
+            const botMsg = document.createElement('div');
+            botMsg.style.margin = "0.5rem 0";
+            botMsg.style.textAlign = "left";
+            botMsg.innerHTML = `<span style="background:#222;color:#fff;padding:0.4rem 0.9rem;border-radius:16px;display:inline-block;">Thanks for your message! We'll get back to you soon.</span>`;
+            chatMessages.appendChild(botMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 800);
+    }
+};
+    </script>
+</body>
+</html>
