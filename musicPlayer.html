@@ -400,6 +400,7 @@ body::-webkit-scrollbar-thumb:hover {
 
         // Format time helper
         function formatTime(sec) {
+            //if statement 
             if (isNaN(sec)) return "0:00";
             const m = Math.floor(sec / 60);
             const s = Math.floor(sec % 60);
@@ -525,4 +526,5 @@ body::-webkit-scrollbar-thumb:hover {
         });
     </script>
 </body>
+
 </html>
