@@ -156,7 +156,7 @@ function minimax(newBoard, depth, isMaximizing) {
                 boardElem.children[i].textContent = board[i];
             }
         }
-
+//func for checking if user won
         function checkWin(mark) {
             const wins = [
                 [0,1,2],[3,4,5],[6,7,8],
@@ -173,4 +173,5 @@ function minimax(newBoard, depth, isMaximizing) {
         initBoard();
     </script>
 </body>
+
 </html>
