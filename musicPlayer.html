@@ -517,7 +517,7 @@ body::-webkit-scrollbar-thumb:hover {
             audio.play();
         });
 
-        // Auto play next song when current ends
+        // Auto play next song when current end
         audio.addEventListener('ended', () => {
             if (playlist.length > 0) {
                 currentTrack = (currentTrack + 1) % playlist.length;
@@ -529,6 +529,7 @@ body::-webkit-scrollbar-thumb:hover {
 </body>
 
 </html>
+
 
 
 
